@@ -6,6 +6,6 @@
 
 __title__ = "tls_client"
 __description__ = "Advanced Python HTTP Client."
-__version__ = "1.0.1.dev1710"
+__version__ = "1.0.1.dev1140"
 __author__ = "Florian Zager, Gan Hong Jian"
 __license__ = "MIT"

@@ -70,7 +70,7 @@ class SteamThread(threading.Thread):
 
 class Session:
     def __init__(self,
-                 client_identifier: ClientIdentifiers = "chrome_133",
+                 client_identifier: ClientIdentifiers = "chrome_146",
                  ja3_string: Optional[str] = None,
                  h2_settings: Optional[Dict[str, int]] = None,
                  h2_settings_order: Optional[List[str]] = None,
@@ -92,6 +92,8 @@ class Session:
                  certificate_pinning: Optional[Dict[str, List[str]]] = None,
                  disable_ipv6: bool = False,
                  disable_ipv4: bool = False,
+                 disable_http3: bool = False,
+                 disable_compression: bool = False,
                  ) -> None:
 
         self.MAX_REDIRECTS: int = 30
@@ -335,6 +337,8 @@ class Session:
         # disable ipv6/ipv4
         self.disable_ipv6 = disable_ipv6
         self.disable_ipv4 = disable_ipv4
+        self.disable_http3 = disable_http3
+        self.disable_compression = disable_compression
         # debugging
         self.debug = debug
 
@@ -470,6 +474,7 @@ class Session:
             # "defaultHeaders": None,
             "disableIPV6": self.disable_ipv6,
             "disableIPV4": self.disable_ipv4,
+            "disableHttp3": self.disable_http3,
             "followRedirects": False,
             "forceHttp1": self.force_http1,
             "headerOrder": self.header_order,
@@ -504,17 +509,9 @@ class Session:
         if certificate_pinning:
             request_payload["certificatePinningHosts"] = certificate_pinning
 
-        if False:
+        if self.disable_compression:
             request_payload["transportOptions"] = {
-                "disableCompression": False,
-                "disableKeepAlives": False,
-                "idleConnTimeout": 0,
-                "maxConnsPerHost": 0,
-                "maxIdleConns": 0,
-                "maxIdleConnsPerHost": 0,
-                "maxResponseHeaderBytes": 0,
-                "readBufferSize": 0,
-                "writeBufferSize": 0,
+                "disableCompression": True,
             }
 
         if self.client_identifier is None:
