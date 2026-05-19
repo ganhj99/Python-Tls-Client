@@ -35,9 +35,20 @@ Upgrade the tls-client native library to a new version.
 
 8. **Bump `tls_client/__version__.py`.** Set `__version__` to `1.0.1.dev<NNNN>` where `<NNNN>` = version digits without dots (e.g. `1.15.0` → `1150`).
 
-9. **Commit.** Stage all changed files and commit with message:
+9. **Verify.** Run the verification script from the repo root:
    ```
-   update libs to $ARGS
+   python scripts/verify_tls.py
    ```
+   The script checks:
+   - All 7 dependency binaries exist and are ≥ 1 MB
+   - Key new identifiers are present in `ClientIdentifiers`
+   - A live request with the default `chrome_146` identifier succeeds against `https://tls.peet.ws/api/all` and prints the JA3 hash + H2 Akamai fingerprint
 
-10. **Report summary.** List: new identifiers added, new default client identifier, binaries updated.
+   If any check fails, fix the issue before committing.
+
+10. **Commit.** Stage all changed files and commit with message:
+    ```
+    update libs to $ARGS
+    ```
+
+11. **Report summary.** List: new identifiers added, new default client identifier, binaries updated, JA3 hash from verification.
