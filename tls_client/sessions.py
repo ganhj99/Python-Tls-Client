@@ -419,7 +419,7 @@ class Session:
         if self.headers is None:
             return CaseInsensitiveDict(headers)
         elif headers is None:
-            return self.headers.copy()
+            return CaseInsensitiveDict(self.headers.copy())
         else:
             merged_headers = self.headers.copy()
             merged_headers.update(headers)
@@ -498,7 +498,7 @@ class Session:
             "timeoutSeconds": timeout,
             # "tlsClientIdentifier": "",
             "withDebug": self.debug,
-            "withDefaultCookieJar": False,
+            "withCustomCookieJar": True,
             "withoutCookieJar": False,
             # "withRandomTLSExtensionOrder": False,
         }
@@ -513,6 +513,7 @@ class Session:
             request_payload["transportOptions"] = {
                 "disableCompression": True,
             }
+            request_payload["headers"].update({"Accept-Encoding": None})
 
         if self.client_identifier is None:
             request_payload["customTlsClient"] = {
@@ -622,7 +623,7 @@ class Session:
                 response = build_response(response_object, response_cookie_jar, request_payload)
             response.elapsed = timedelta(seconds=elapsed)
 
-            response.history = history
+            response.history = history.copy()
             if not allow_redirects or not response.is_redirect:
                 return response
 
