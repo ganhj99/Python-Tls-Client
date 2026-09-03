@@ -37,7 +37,7 @@ def check_identifiers():
     print("\n=== ClientIdentifiers ===")
     from tls_client.settings import ClientIdentifiers
     args = ClientIdentifiers.__args__
-    required = ["chrome_144", "chrome_146", "chrome_146_PSK", "brave_146", "firefox_147", "safari_ios_26_0"]
+    required = ["chrome_146", "chrome_150", "chrome_152", "chrome_152_PSK", "safari_ios_18_5"]
     failed = []
     for ident in required:
         status = "OK" if ident in args else "MISS"
@@ -48,7 +48,7 @@ def check_identifiers():
     return failed
 
 
-def check_request(client_identifier="chrome_146"):
+def check_request(client_identifier="chrome_152"):
     print(f"\n=== Live request ({client_identifier}) ===")
     import tls_client
     session = tls_client.Session(client_identifier=client_identifier)
